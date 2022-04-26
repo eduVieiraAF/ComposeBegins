@@ -4,13 +4,17 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -47,26 +51,41 @@ fun MessageCard(msg: Message) {
                 .clip(CircleShape)
                 .border(0.5.dp, MaterialTheme.colors.secondary, CircleShape)
         )
-        // Add a horizontal space between the image and the column
+
         Spacer(modifier = Modifier.width(8.dp))
 
+        var isExpanded by remember { mutableStateOf(false) }
+        val surfaceColor: Color by animateColorAsState(
+            if (isExpanded) MaterialTheme.colors.onSecondary else MaterialTheme.colors.surface
+        )
+
         Column (modifier = Modifier
-            .border(0.5.dp, Color.DarkGray, RectangleShape)
+            .clickable { isExpanded = !isExpanded }
+            .border(0.2.dp, MaterialTheme.colors.secondary, RectangleShape)
             .padding(all = 8.dp)){
             Text(
                 text = msg.author,
-                color = MaterialTheme.colors.secondaryVariant,
+                color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.subtitle2,
             )
 
             // Add a vertical space between the author and message texts
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = msg.body,
-                modifier = Modifier.padding(all = 4.dp),
-                color = MaterialTheme.colors.secondaryVariant,
-                style = MaterialTheme.typography.body2
-            )
+
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                color = surfaceColor,
+                elevation = 1.dp,
+                modifier = Modifier.animateContentSize().padding(all = 4.dp)
+            ) {
+                Text(
+                    text = msg.body,
+                    modifier = Modifier.padding(all = 4.dp),
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                    color = MaterialTheme.colors.secondaryVariant,
+                    style = MaterialTheme.typography.body2
+                )
+            }
         }
     }
 }
@@ -80,12 +99,11 @@ fun Conversation(messages: List<Message>) {
     }
 }
 
-
-@Preview(name = "Dark Mode")
+@Preview(name = "Light Mode")
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    uiMode = Configuration.UI_MODE_NIGHT_MASK,
     showBackground = true,
-    name = "Light Mode"
+    name = "Dark Mode"
 )
 @Composable
 fun PreviewMessageCard() {
