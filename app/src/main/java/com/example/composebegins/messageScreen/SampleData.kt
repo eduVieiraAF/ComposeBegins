@@ -1,4 +1,4 @@
-package com.example.composebegins
+package com.example.composebegins.messageScreen
 
 
 object SampleData {
