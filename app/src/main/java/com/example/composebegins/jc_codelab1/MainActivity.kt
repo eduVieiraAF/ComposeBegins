@@ -96,6 +96,15 @@ fun OnboardingScreen(onContinueClicked: () -> Unit) {
     }
 }
 
+
+@Preview(showBackground = true, widthDp = 320)
+@Composable
+fun ShowGreetings() {
+    ComposeBeginsTheme {
+        Greetings()
+    }
+}
+
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
