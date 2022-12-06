@@ -87,7 +87,7 @@ fun Conversation(messages: List<Message>) {
     }
 }
 
-@Preview(name = "Message Screen", showBackground = true)
+@Preview(name = "Message Screen", showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewMessageCard() {
     ComposeBeginsTheme {

@@ -38,7 +38,7 @@ fun HelloContent(name: String, onNameChange: (String) -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ShowScreenCast() {
     HelloScreen()
